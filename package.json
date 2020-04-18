@@ -1,0 +1,50 @@
+{
+  "name": "MBARI Video Annotation Assistance AWS Application",
+  "version": "0.0.1",
+  "description": "AWS enabled MBARI Video Annotation Assistance"
+  "author": "dcline <dcline@mbari.org>",
+  "license": "MIT",
+  "keywords": [
+    "autocomplete",
+    "vuejs",
+    "select",
+    "search"
+  ],
+  "main": "dist/VueSearchSelect.common.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danellecline/vaa-aws.git"
+  },
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit",
+    "lib:build": "vue-cli-service build --target lib --name VueSearchSelect ./src/lib/index.js",
+    "lib:publish": "npm run lib:build && npm publish",
+    "lib:publish:alpha": "npm run lib:build && npm publish --tag alpha"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.13.0",
+    "@vue/cli-plugin-babel": "^3.10.0",
+    "@vue/cli-plugin-eslint": "^3.10.0",
+    "@vue/cli-plugin-unit-jest": "^3.10.0",
+    "@vue/cli-service": "^3.10.0",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "@vue/test-utils": "1.0.0-beta.29",
+    "axios": "^0.19.0",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^23.6.0",
+    "core-js": "^2.6.5",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "lodash": "^4.17.15",
+    "sass": "^1.18.0",
+    "sass-loader": "^7.1.0",
+    "semantic-ui-css": "^2.4.1",
+    "vue": "^2.6.10",
+    "vue-router": "^3.0.3",
+    "vue-template-compiler": "^2.6.10"
+  }
+}
