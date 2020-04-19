@@ -17,6 +17,15 @@
                 />
                 <Tool :event="() => saveImage()" :iconClass="'fas fa-save fa-lg'" />
             </div>
+          <div>
+              <model-select
+                :options="options"
+                v-model="item"
+                placeholder="type name here to rename"
+                ref="modelselect"
+              >
+              </model-select>
+            </div>
             <Editor
                     :canvasWidth="canvasWidth"
                     :canvasHeight="canvasHeight"
@@ -31,6 +40,7 @@
 <script>
 import Editor from 'vue-image-markup'
 import Tool from '../RectEdit/_Tool'
+import { ModelSelect } from 'vue-search-select'
 import 'vue-search-select/dist/VueSearchSelect.css'
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
@@ -41,11 +51,12 @@ export default {
       currentActiveMethod: null,
       params: {},
       color: 'black',
-      options: {},
+      searchText: '',
       item: {
         text: '',
         value: ''
-      }
+      },
+      name: this.annotation.name
     }
   },
   props: {
@@ -63,10 +74,26 @@ export default {
     },
     annotation: {
       type: Object
+    },
+    options: {
+      type: Array
     }
 
   },
   mounted () {
+    if (this.annotation) {
+      console.log('Check annotation')
+    }
+    this.$watch(
+      () => {
+        return this.$refs.editor.croppedImage
+      },
+      val => {
+        this.croppedImage = val
+      }
+    )
+  },
+  updated () {
     if (this.annotation) {
       this.$refs.editor.setBackgroundImage(this.annotation.ref)
 
@@ -85,32 +112,34 @@ export default {
       }
 
       this.$refs.editor.drawRect(params)
-    }
-    this.$watch(
-      () => {
-        return this.$refs.editor.croppedImage
-      },
-      val => {
-        this.croppedImage = val
+      var option
+      for (option of this.options) {
+        if (this.item.text !== this.annotation.name) {
+          this.$refs.modelselect.selectItem(option)
+          console.log('Selecting item ')
+          console.log(option.text)
+        }
       }
-    )
-  },
-  updated () {
-    if (this.annotation) {
-      this.$refs.editor.setBackgroundImage(this.annotation.ref)
     }
   },
   methods: {
     saveImage () {
-      let image = this.$refs.editor.saveImage()
-      this.saveImageAsFile(image)
+      if (this.item.text !== '') {
+        this.annotation.name = this.item.text
+      }
+      // give data back to the parent by interface
+      this.$emit('interface', this.annotation)
     },
-    saveImageAsFile (base64) {
-      let link = document.createElement('a')
-      link.setAttribute('href', base64)
-      link.setAttribute('download', 'image-markup')
-      link.click()
-    },
+    // saveImage () {
+    //   let image = this.$refs.editor.saveImage()
+    //   this.saveImageAsFile(image)
+    // },
+    // saveImageAsFile (base64) {
+    //   let link = document.createElement('a')
+    //   link.setAttribute('href', base64)
+    //   link.setAttribute('download', 'image-markup')
+    //   link.click()
+    // },
     setTool (type, params) {
       this.currentActiveMethod = type
       this.$refs.editor.set(type, params)
@@ -126,14 +155,18 @@ export default {
     redo () {
       this.currentActiveMethod = this.redo
       this.$refs.editor.redo()
+    },
+    input (item) {
+      console.log('Add local var to save last ann and change if updated with el callback?')
+      console.log(item.text)
     }
   },
   components: {
     Tool,
-    Editor
+    Editor,
+    ModelSelect
   }
 }
 </script>
-
 
 <style src="../../assets/app.scss" lang="scss"></style>

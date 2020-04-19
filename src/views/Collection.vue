@@ -26,6 +26,7 @@
                 </model-select>
                 <div class="button-group">
                   <button @click="$refs.cpt.unfilter()">Unfilter</button>
+                  <button :class="[filterOption==='filterByItem' ? 'is-checked' : '']" @click="$refs.cpt.filter('filterByItem')">Filter</button>
                   <button @click="$refs.cpt.shuffle()">Shuffle</button>
                   <button @click="$refs.cpt.sort('name')">Sort by name</button>
                 </div>
@@ -44,7 +45,7 @@
       </template>
       <template slot="paneR">
         <div v-if="selected" class="item">
-          <RectEditor ref="editor" :options="options" :annotation="selected" :canvas-height="300" :canvas-width="300" ></RectEditor>
+          <RectEditor ref="recteditor" @interface="handleFcAfterDateBack" :options="options" :annotation="selected" :canvas-height="300" :canvas-width="300" ></RectEditor>
         </div>
       </template>
     </split-pane>
@@ -223,7 +224,8 @@ export default {
         { text: 'Evan', value: '0' },
         { text: 'AEvan', value: '1' },
         { text: 'BEvan', value: '2' },
-        { text: 'CEvan', value: '5' }],
+        { text: 'CEvan', value: '5' },
+        { text: 'DEvan', value: '6' }],
       item: {
         text: '',
         value: ''
@@ -234,6 +236,9 @@ export default {
   //   this.$refs.sort.editor.set(this.editor.mode,this.editor.options);
   // },
   methods: {
+    handleFcAfterDateBack (event) {
+      console.log('data after child handle: ', event)
+    },
     getOptions: function () {
       var _this = this
       return {
@@ -262,6 +267,7 @@ export default {
         this.options.push({ text: input.value, value: '0' })
         input.value = ''
         this.filter(input.value)
+        this.$refs.recteditor.$options = this.options
       }
     },
     replace: function () {
@@ -286,7 +292,7 @@ export default {
       this.sortOption = key
     },
     filter: function (key) {
-      if (this.filterOption == key) {
+      if (this.filterOption === key) {
         key = null
       }
       this.isotopeFilter(key)
@@ -294,7 +300,7 @@ export default {
     },
     shuffle: function () {
       this.isotopeShuttle()
-      this.sortOption = null;
+      this.sortOption = null
     }
   },
   components: {

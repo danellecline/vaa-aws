@@ -9,7 +9,7 @@ import Basic from './views/Basic'
 import CustomFilter from './views/CustomFilter'
 import List from './views/List'
 import ListCustomText from './views/ListCustomText'
-import LabelGrid from './views/LabelGrid'
+import LabelGrid from './views/Collection'
 
 Vue.use(Router)
 
