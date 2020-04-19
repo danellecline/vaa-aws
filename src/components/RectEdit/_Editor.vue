@@ -31,6 +31,7 @@
 <script>
 import Editor from 'vue-image-markup'
 import Tool from '../RectEdit/_Tool'
+import 'vue-search-select/dist/VueSearchSelect.css'
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
 
@@ -133,3 +134,6 @@ export default {
   }
 }
 </script>
+
+
+<style src="../../assets/app.scss" lang="scss"></style>

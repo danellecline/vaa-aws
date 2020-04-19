@@ -229,6 +229,25 @@ a {
 
 }
 
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  .editor {
+    display: flex;
+    justify-content: space-between;
+
+    .current-color {
+      border-radius: 5px;
+      min-width: 28px;
+      min-height: 28px;
+    }
+
+    .active-tool {
+      cursor: pointer;
+      color: #4287f5;
+    }
+  }
+}
 
 .ui.vertical.menu {
   margin-top: 0;

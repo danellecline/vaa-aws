@@ -2,7 +2,36 @@
   <div>
     <split-pane :min-percent='20' :max-percent='50' :default-percent='60' split="vertical">
       <template slot="paneL">
-
+        <h1>Collection: {{ collectionName }}</h1>
+        <div id="addreplace">
+          <div id="change">
+            <div>
+              <input id="itemForm" @keypress.enter="Add" />
+              <button @click="add">Add new name</button>
+            </div>
+            <button @click="replace">Replace</button>
+            <button @click="remove">Remove</button>
+          </div>
+        </div>
+        <div class="ui horizontal segment">
+              <span>Filter by name</span>
+              <div>
+                <model-select
+                        :options="options"
+                        v-model="item"
+                        placeholder="type name here to search"
+                        :class="[filterOption==='filterByItem' ? 'is-checked' : '']"
+                        @click="$refs.cpt.filter('filterByItem')"
+                >
+                </model-select>
+                <div class="button-group">
+                  <button @click="$refs.cpt.unfilter()">Unfilter</button>
+                  <button @click="$refs.cpt.shuffle()">Shuffle</button>
+                  <button @click="$refs.cpt.sort('name')">Sort by name</button>
+                </div>
+                <span>Name: {{ item.text }} Total Examples: {{ item.value }}</span>
+              </div>
+          </div>
         <div>
           <isotope ref="cpt" id="root_isotope" class="isoDefault" :options='getOptions()'
                    :list="annotation" @filter="filterOption=arguments[0]"
@@ -12,65 +41,10 @@
             </div>
           </isotope>
         </div>
-
       </template>
       <template slot="paneR">
-        <div id="filter">
-          <div id="change">
-            <button @click="add">Add</button>
-            <div>
-              <input id="itemForm" @keypress.enter="Add" />
-              <button @click="add">Add</button>
-            </div>
-            <button @click="replace">Replace</button>
-            <button @click="remove">Remove</button>
-          </div>-
-        </div>
-        <span>Sort</span>
-        <div id="sort">
-          <button @click="$refs.cpt.sort('name')">Sort by name</button>
-          <button :class="[sortOption==='id' ? 'is-checked' : '']" @click="$refs.cpt.sort('id')">Sort by id</button>
-       </div>
-        <div class="ui vertical segment">
-          <div class="flexbox">
-            <div class="flex-content">
-              <span>Filter by name</span>
-              <div>
-                <model-select
-                        :options="options"
-                        v-model="item"
-                        placeholder="type object name here to search"
-                        :class="[filterOption==='filterByItem' ? 'is-checked' : '']"
-                        @click="$refs.cpt.filter('filterByItem')"
-                >
-                </model-select>
-                <div class="button-group">
-                  <button @click="$refs.cpt.unfilter()">Unfilter</button>
-                  <button :class="[filterOption==='filterByItem' ? 'is-checked' : '']" @click="$refs.cpt.filter('filterByItem')">Filter</button>
-                  <button @click="$refs.cpt.shuffle()">Shuffle</button>
-                </div>
-              </div>
-              <div class="flex-result">
-                <table class="ui celled table">
-                  <thead>
-                  <tr>
-                    <th>Total Samples</th>
-                    <th>Object Name</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                    <td>{{item.value}}</td>
-                    <td>{{item.text}}</td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            </div>
-          <div v-if="selected" class="item">
-            <RectEditor ref="editor" :options="options" :annotation="selected" :canvas-height="300" :canvas-width="300" ></RectEditor>
-          </div>
+        <div v-if="selected" class="item">
+          <RectEditor ref="editor" :options="options" :annotation="selected" :canvas-height="300" :canvas-width="300" ></RectEditor>
         </div>
       </template>
     </split-pane>
@@ -242,6 +216,7 @@ export default {
       selected: null,
       sortOption: null,
       filterOption: null,
+      collectionName: 'Benthic2017',
       options: [
         { text: 'Danelle', value: '4' },
         { text: 'AAAJimmy', value: '3' },

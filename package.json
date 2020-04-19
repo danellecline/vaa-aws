@@ -1,7 +1,7 @@
 {
-  "name": "MBARI Video Annotation Assistance AWS Application",
+  "name": "vaa-aws",
   "version": "0.0.1",
-  "description": "AWS enabled MBARI Video Annotation Assistance"
+  "description": "AWS enabled MBARI Video Annotation Assistance",
   "author": "dcline <dcline@mbari.org>",
   "license": "MIT",
   "keywords": [
@@ -10,7 +10,6 @@
     "select",
     "search"
   ],
-  "main": "dist/VueSearchSelect.common.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/danellecline/vaa-aws.git"
@@ -18,14 +17,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit",
-    "lib:build": "vue-cli-service build --target lib --name VueSearchSelect ./src/lib/index.js",
-    "lib:publish": "npm run lib:build && npm publish",
-    "lib:publish:alpha": "npm run lib:build && npm publish --tag alpha"
+    "lint": "vue-cli-service lint"
   },
   "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.13.0",
     "@vue/cli-plugin-babel": "^3.10.0",
     "@vue/cli-plugin-eslint": "^3.10.0",
     "@vue/cli-plugin-unit-jest": "^3.10.0",
@@ -45,6 +39,13 @@
     "semantic-ui-css": "^2.4.1",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.10",
+    "@fortawesome/fontawesome-free": "^5.12.0"
+  },
+  "dependencies": {
+    "vue-image-markup": "^3.0.8",
+    "vue-search-select": "^2.9.3",
+    "vue-splitpane": "^1.0.6",
+    "vueisotope": "^3.1.2"
   }
 }

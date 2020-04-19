@@ -3,12 +3,27 @@
     <div id="sidebar">
       <div class="sidebar-header">
         <div class="box-link">
-          <h1>MBARI Annotation Assistance</h1>
+          <h1>MBARI</h1>
+          <span> Video Annotation Assistance</span>
         </div>
       </div>
       <nav class="sidebar-nav" role="navigation">
         <div class="sidebar-nav-group">
           <div class="sidebar-nav-heading">Training Data</div>
+          <ul class="sidebar-nav-items">
+            <li>
+              <router-link
+                :to="{ path: 'label-edit' }"
+                class="sidebar-nav-item"
+                exact-active-class="selected"
+              >
+                Model
+              </router-link>
+            </li>
+          </ul>
+        </div>
+        <div class="sidebar-nav-group">
+          <div class="sidebar-nav-heading">Model</div>
           <ul class="sidebar-nav-items">
             <li>
               <router-link
