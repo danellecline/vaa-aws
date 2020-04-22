@@ -9,8 +9,6 @@
               <input id="itemForm" @keypress.enter="Add" />
               <button @click="add">Add new name</button>
             </div>
-            <button @click="replace">Replace</button>
-            <button @click="remove">Remove</button>
           </div>
         </div>
         <div class="ui horizontal segment">
@@ -38,14 +36,19 @@
                    :list="annotation" @filter="filterOption=arguments[0]"
                    @sort="sortOption=arguments[0]">
             <div v-for="c in annotation" :key="c.id" @click="selected=c">
-              <img :src="c.url" />
+              <img :src="c.crop_url" />
             </div>
           </isotope>
         </div>
       </template>
       <template slot="paneR">
         <div v-if="selected" class="item">
-          <RectEditor ref="recteditor" @interface="handleFcAfterDateBack" :options="options" :annotation="selected" :canvas-height="300" :canvas-width="300" ></RectEditor>
+          <Editor ref="editor" @changeRectangle="updateRectangle($event)" @changeName="updateName($event)"
+                  :options="options"
+                  :annotation="selected"
+                  :canvas-height="300"
+                  :canvas-width="300" ></Editor>
+          <!--<Editor ref="editor" v-bind:name.sync="" :options="options" :annotation="selected" :canvas-height="300" :canvas-width="300" ></Editor>-->
         </div>
       </template>
     </split-pane>
@@ -55,7 +58,7 @@
 <script>
 import isotope from 'vueisotope'
 import splitPane from 'vue-splitpane'
-import RectEditor from '../components/RectEdit/_Editor'
+import Editor from './Editor'
 import { ModelSelect } from 'vue-search-select'
 import 'vue-search-select/dist/VueSearchSelect.css'
 
@@ -66,152 +69,23 @@ export default {
         {
           id: 0,
           name: 'Danelle',
-          height: 100,
-          width: 50,
-          x: 10,
-          y: 35,
-          ref: 'http://localhost:3000/static/fullframe/D0232_03HD_00-57-05.jpg',
-          url: 'http://localhost:3000/static/LONG_WHITE/D0232_03HD_00-48-10_0.jpg'
+          bounding_box: { height: 100, width: 50, x: 100, y: 135 },
+          frame_crop_url: 'http://localhost:3000/static/fullframe/D0232_03HD_00-57-05.jpg',
+          crop_url: 'http://localhost:3000/static/LONG_WHITE/D0232_03HD_00-48-10_0.jpg'
         },
         {
           id: 1,
-          name: 'AEvan',
-          height: 100,
-          width: 50,
-          x: 10,
-          y: 35,
-          ref: 'http://localhost:3000/static/fullframe/D0232_03HD_00-30-25.jpg',
-          url: 'http://localhost:3000/static/PENIAGONE_SP_A/D0232_03HD_00-45-00_0.jpg'
-        },
-        {
-          id: 2,
-          name: 'BEvan',
-          height: 100,
-          width: 50,
-          x: 10,
-          y: 35,
-          ref: 'http://localhost:3000/static/fullframe/D0232_03HD_00-30-25.jpg',
-          url: 'http://localhost:3000/static/PENIAGONE_SP_A/D0232_03HD_00-45-00_0.jpg'
-        },
-        {
-          id: 3,
-          name: 'CEvan',
-          height: 100,
-          width: 50,
-          x: 10,
-          y: 35,
-          ref: 'http://localhost:3000/static/fullframe/D0232_03HD_00-30-25.jpg',
-          url: 'http://localhost:3000/static/PENIAGONE_SP_A/D0232_03HD_00-45-00_0.jpg'
-        },
-        {
-          id: 4,
-          name: 'DEvan',
-          height: 100,
-          width: 50,
-          x: 10,
-          y: 35,
-          ref: 'http://localhost:3000/static/fullframe/D0232_03HD_00-30-25.jpg',
-          url: 'http://localhost:3000/static/PENIAGONE_SP_A/D0232_03HD_00-45-00_0.jpg'
-        },
-        {
-          id: 5,
           name: 'Evan',
-          height: 100,
-          width: 50,
-          x: 10,
-          y: 35,
-          ref: 'http://localhost:3000/static/fullframe/D0232_03HD_00-30-25.jpg',
-          url: 'http://localhost:3000/static/PENIAGONE_SP_A/D0232_03HD_00-45-00_0.jpg'
-        },
-        {
-          id: 6,
-          name: 'Evan',
-          height: 100,
-          width: 50,
-          x: 10,
-          y: 35,
-          ref: 'http://localhost:3000/static/fullframe/D0232_03HD_00-30-25.jpg',
-          url: 'http://localhost:3000/static/PENIAGONE_SP_A/D0232_03HD_00-45-00_0.jpg'
-        },
-        {
-          id: 7,
-          name: 'Evan',
-          height: 100,
-          width: 50,
-          x: 10,
-          y: 35,
-          ref: 'http://localhost:3000/static/fullframe/D0232_03HD_00-30-25.jpg',
-          url: 'http://localhost:3000/static/PENIAGONE_SP_A/D0232_03HD_00-45-00_0.jpg'
-        },
-        {
-          id: 8,
-          name: 'Evan',
-          height: 100,
-          width: 50,
-          x: 10,
-          y: 35,
-          ref: 'http://localhost:3000/static/fullframe/D0232_03HD_00-30-25.jpg',
-          url: 'http://localhost:3000/static/PENIAGONE_SP_A/D0232_03HD_00-45-00_0.jpg'
-        },
-        {
-          id: 9,
-          name: 'Evan',
-          height: 100,
-          width: 50,
-          x: 10,
-          y: 35,
-          ref: 'http://localhost:3000/static/fullframe/D0232_03HD_00-30-25.jpg',
-          url: 'http://localhost:3000/static/PENIAGONE_SP_A/D0232_03HD_00-45-00_0.jpg'
-        },
-        {
-          id: 10,
-          name: 'Evan',
-          height: 100,
-          width: 50,
-          x: 10,
-          y: 35,
-          ref: 'http://localhost:3000/static/fullframe/D0232_03HD_00-30-25.jpg',
-          url: 'http://localhost:3000/static/PENIAGONE_SP_A/D0232_03HD_00-45-00_0.jpg'
-        },
-        {
-          id: 11,
-          name: 'Evan',
-          height: 100,
-          width: 50,
-          x: 10,
-          y: 35,
-          ref: 'http://localhost:3000/static/fullframe/D0232_03HD_00-30-25.jpg',
-          url: 'http://localhost:3000/static/PENIAGONE_SP_A/D0232_03HD_00-45-00_0.jpg'
-        },
-        {
-          id: 12,
-          name: 'Evan',
-          height: 100,
-          width: 50,
-          x: 10,
-          y: 35,
-          ref: 'http://localhost:3000/static/fullframe/D0232_03HD_00-30-25.jpg',
-          url: 'http://localhost:3000/static/PENIAGONE_SP_A/D0232_03HD_00-45-00_0.jpg'
-        },
-        {
-          id: 13,
-          name: 'Evan',
-          height: 100,
-          width: 50,
-          x: 10,
-          y: 35,
-          ref: 'http://localhost:3000/static/fullframe/D0232_03HD_00-30-25.jpg',
-          url: 'http://localhost:3000/static/PENIAGONE_SP_A/D0232_03HD_00-45-00_0.jpg'
+          bounding_box: { height: 100, width: 50, x: 50, y: 35 },
+          frame_crop_url: 'http://localhost:3000/static/fullframe/D0232_03HD_00-30-25.jpg',
+          crop_url: 'http://localhost:3000/static/PENIAGONE_SP_A/D0232_03HD_00-45-00_0.jpg'
         },
         {
           id: 14,
-          name: 'AAAJimmy',
-          height: 100,
-          width: 50,
-          x: 10,
-          y: 35,
-          ref: 'http://localhost:3000/static/fullframe/D0232_03HD_00-30-25.jpg',
-          url: 'http://localhost:3000/static/BENTHOCODON/D0232_03HD_01-00-05_0.jpg'
+          name: 'Jimmy',
+          bounding_box: { height: 150, width: 150, x: 10, y: 35 },
+          frame_crop_url: 'http://localhost:3000/static/fullframe/D0232_03HD_00-14-25.jpg',
+          crop_url: 'http://localhost:3000/static/BENTHOCODON/D0232_03HD_01-00-05_0.jpg'
         }
       ],
       selected: null,
@@ -220,24 +94,29 @@ export default {
       collectionName: 'Benthic2017',
       options: [
         { text: 'Danelle', value: '4' },
-        { text: 'AAAJimmy', value: '3' },
-        { text: 'Evan', value: '0' },
-        { text: 'AEvan', value: '1' },
-        { text: 'BEvan', value: '2' },
-        { text: 'CEvan', value: '5' },
-        { text: 'DEvan', value: '6' }],
+        { text: 'Jimmy', value: '3' },
+        { text: 'Evan', value: '0' }],
       item: {
         text: '',
         value: ''
       }
     }
   },
-  // mounted() {
-  //   this.$refs.sort.editor.set(this.editor.mode,this.editor.options);
-  // },
   methods: {
-    handleFcAfterDateBack (event) {
-      console.log('data after child handle: ', event)
+    updateName (event) {
+      console.log('Annotation name updated==============: ', event)
+      var replace = this.selected
+      replace.name = event
+      this.list = [this.selected, replace]
+    },
+    updateRectangle (event) {
+      console.log('Annotation rectangle updated==============: ', event)
+      var replace = this.selected
+      replace.bounding_box.width = event.width
+      replace.bounding_box.height = event.height
+      replace.bounding_box.x = event.left
+      replace.bounding_box.y = event.top
+      this.list = [this.selected, replace]
     },
     getOptions: function () {
       var _this = this
@@ -267,20 +146,8 @@ export default {
         this.options.push({ text: input.value, value: '0' })
         input.value = ''
         this.filter(input.value)
-        this.$refs.recteditor.$options = this.options
+        this.$refs.editor.$options = this.options
       }
-    },
-    replace: function () {
-      this.list = [{ name: 'AAAJimmy', id: 14 }, {
-        name: 'AAAJimmyFoobar',
-        value: '0',
-        height: 100,
-        width: 50,
-        x: 10,
-        y: 35,
-        ref: 'http://localhost:3000/static/fullframe/D0232_03HD_00-30-25.jpg',
-        url: 'http://localhost:3000/static/LONG_WHITE/D0232_03HD_00-48-10_0.jpg'
-      }]
     },
     remove: function () {
       if (this.list.length) {
@@ -307,7 +174,7 @@ export default {
     isotope,
     splitPane,
     ModelSelect,
-    RectEditor
+    Editor: Editor
   }
 }
 </script>
