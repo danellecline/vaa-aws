@@ -23,6 +23,7 @@
                 v-model="item"
                 placeholder="type name here to rename"
                 ref="modelselect"
+                @input="handleOnInput"
               >
               </model-select>
             </div>
@@ -55,8 +56,7 @@ export default {
       item: {
         text: '',
         value: ''
-      },
-      name: this.annotation.name
+      }
     }
   },
   props: {
@@ -95,30 +95,30 @@ export default {
   },
   updated () {
     if (this.annotation) {
+      console.log('Updated ')
+      console.log(this.annotation.name)
+
       this.$refs.editor.setBackgroundImage(this.annotation.ref)
 
-      var params = {
-        fill: 'transparent',
-        width: this.annotation.width,
-        height: this.annotation.height,
-        angle: 0,
-        top: this.annotation.x,
-        left: this.annotation.y,
-        strokeWidth: 4,
-        stroke: 'black',
-        opacity: 1,
-        noScaleCache: false,
-        strokeUniform: true
-      }
+      if (this.searchText !== this.annotation.name) {
+        this.$refs.editor.clear()
 
-      this.$refs.editor.drawRect(params)
-      var option
-      for (option of this.options) {
-        if (this.item.text !== this.annotation.name) {
-          this.$refs.modelselect.selectItem(option)
-          console.log('Selecting item ')
-          console.log(option.text)
+        var params = {
+          fill: 'transparent',
+          width: this.annotation.width,
+          height: this.annotation.height,
+          angle: 0,
+          top: this.annotation.x,
+          left: this.annotation.y,
+          strokeWidth: 4,
+          stroke: 'black',
+          opacity: 1,
+          noScaleCache: false,
+          strokeUniform: true
         }
+        this.$refs.editor.drawRect(params)
+        this.$refs.modelselect.searchText = this.annotation.name
+        this.searchText = this.annotation.name
       }
     }
   },
@@ -156,9 +156,13 @@ export default {
       this.currentActiveMethod = this.redo
       this.$refs.editor.redo()
     },
-    input (item) {
-      console.log('Add local var to save last ann and change if updated with el callback?')
-      console.log(item.text)
+    handleOnInput ($event) {
+      this.item = $event
+      if (this.annotation.name !== this.item.text) {
+        this.annotation.name = this.item.text
+        // var r = this.$refs.editor.getBoundingClientRect()
+        // console.log('')
+      }
     }
   },
   components: {
