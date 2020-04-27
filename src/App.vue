@@ -13,7 +13,7 @@
           <ul class="sidebar-nav-items">
             <li>
               <router-link
-                :to="{ path: 'label-edit' }"
+                :to="{ path: 'collection-edit' }"
                 class="sidebar-nav-item"
                 exact-active-class="selected"
               >

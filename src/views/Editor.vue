@@ -2,7 +2,7 @@
     <div id="recteditor" class="main">
         <div class="editor-container">
             <div class="editor">
-                <Tool :event="() => clear()" :iconClass="'fas fa-trash-alt fa-lg'" />
+                <Tool :event="() => deleteById()" :iconClass="'fas fa-trash-alt fa-lg'" />
                 <Tool
                         :event="() => setTool('selectMode')"
                         :iconClass="'fas fa-arrows-alt fa-lg'"
@@ -54,7 +54,7 @@ export default {
       strokeWidth: 4,
       fontSize: 20,
       history: [],
-      imageUrl: '',
+      id: '',
       opacity: 0.3,
       scaleFactor: 1.0,
       rectWidth: 0,
@@ -92,18 +92,18 @@ export default {
     this.update()
   },
   updated () {
-    console.log('=====Updated')
+    console.log('Updated')
     this.update()
   },
   methods: {
     update () {
-      if (this.startup || (this.imageUrl !== this.annotation.frame_crop_url)) {
+      if (this.startup || (this.id !== this.annotation.id)) {
         this.startup = false
-        console.log('=====Update')
+        console.log('Update')
         console.log(this.annotation.name)
         this.clear()
         this.setBackgroundImage(this.annotation.frame_crop_url)
-        this.imageUrl = this.annotation.frame_crop_url
+        this.id = this.annotation.id
         this.rectHeight = this.annotation.bounding_box.height
         this.rectWidth = this.annotation.bounding_box.width
         this.rectLeft = this.annotation.bounding_box.x
@@ -211,6 +211,10 @@ export default {
       xhr.open('GET', url)
       xhr.responseType = 'blob'
       xhr.send()
+    },
+    deleteById () {
+      this.$emit('deleteById', this.id)
+      this.canvas.clear()
     },
     clear () {
       if (this.canvas !== null) {

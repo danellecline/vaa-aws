@@ -6,7 +6,7 @@
         <div id="addreplace">
           <div id="change">
             <div>
-              <input id="itemForm" @keypress.enter="Add" />
+              <input ref="newname" @keypress.enter="add" />
               <button @click="add">Add new name</button>
             </div>
           </div>
@@ -18,17 +18,16 @@
                         :options="options"
                         v-model="item"
                         placeholder="type name here to search"
-                        :class="[filterOption==='filterByItem' ? 'is-checked' : '']"
-                        @click="$refs.cpt.filter('filterByItem')"
+                        ref="filterbyname"
+                        @input="$refs.cpt.filter('filterByItem')"
                 >
                 </model-select>
                 <div class="button-group">
                   <button @click="$refs.cpt.unfilter()">Unfilter</button>
-                  <button :class="[filterOption==='filterByItem' ? 'is-checked' : '']" @click="$refs.cpt.filter('filterByItem')">Filter</button>
                   <button @click="$refs.cpt.shuffle()">Shuffle</button>
                   <button @click="$refs.cpt.sort('name')">Sort by name</button>
                 </div>
-                <span>Name: {{ item.text }} Total Examples: {{ item.value }}</span>
+                <span>Total Examples: {{ totalPerClass }}</span>
               </div>
           </div>
         <div>
@@ -43,12 +42,11 @@
       </template>
       <template slot="paneR">
         <div v-if="selected" class="item">
-          <Editor ref="editor" @changeRectangle="updateRectangle($event)" @changeName="updateName($event)"
+          <Editor ref="editor" @changeRectangle="updateRectangle($event)" @changeName="updateName($event)" @deleteById="deleteById($event)"
                   :options="options"
                   :annotation="selected"
                   :canvas-height="300"
                   :canvas-width="300" ></Editor>
-          <!--<Editor ref="editor" v-bind:name.sync="" :options="options" :annotation="selected" :canvas-height="300" :canvas-width="300" ></Editor>-->
         </div>
       </template>
     </split-pane>
@@ -93,14 +91,19 @@ export default {
       filterOption: null,
       collectionName: 'Benthic2017',
       options: [
-        { text: 'Danelle', value: '4' },
-        { text: 'Jimmy', value: '3' },
-        { text: 'Evan', value: '0' }],
+        { text: 'Danelle', value: '0' },
+        { text: 'Jimmy', value: '1' },
+        { text: 'Evan', value: '2' }],
       item: {
         text: '',
         value: ''
-      }
+      },
+      totalPerClass: 0
     }
+  },
+  mounted () {
+    console.log('Mounted - cache images here')
+    totalPerClass = this.list.length
   },
   methods: {
     updateName (event) {
@@ -117,6 +120,10 @@ export default {
       replace.bounding_box.x = event.left
       replace.bounding_box.y = event.top
       this.list = [this.selected, replace]
+    },
+    deleteById (event) {
+      console.log('Delete ', event)
+      this.annotation.splice(this.annotation.indexOf(event), 1)
     },
     getOptions: function () {
       var _this = this
@@ -140,18 +147,17 @@ export default {
       }
     },
     add: function () {
-      var input = this.$ref.itemForm
+      var option = this.$refs.newname.value
+      console.log(option)
 
-      if (input.value !== '') {
-        this.options.push({ text: input.value, value: '0' })
-        input.value = ''
-        this.filter(input.value)
-        this.$refs.editor.$options = this.options
-      }
-    },
-    remove: function () {
-      if (this.list.length) {
-        this.list.splice(0, 1)
+      if (option!== '') {
+        let n = {text: option, value: this.options.length}
+        this.options.push(n) 
+        //value: (l + 1).toString() })
+        this.$refs.newname.value = ''
+        this.item.text = option
+//         this.filter(input.value)
+//         this.$refs.editor.$options = this.options
       }
     },
     sort: function (key) {

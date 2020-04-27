@@ -9,7 +9,7 @@ import Basic from './views/Basic'
 import CustomFilter from './views/CustomFilter'
 import List from './views/List'
 import ListCustomText from './views/ListCustomText'
-import LabelGrid from './views/Collection'
+import Collection from './views/Collection'
 
 Vue.use(Router)
 
@@ -20,7 +20,7 @@ export default new Router({
       redirect: '/model'
     },
     // rectedit
-    { path: '/label-edit', component: LabelGrid },
+    { path: '/collection-edit', component: Collection },
     // model
     { path: '/model', name: 'model', component: Model },
     { path: '/model-list', component: ModelList },
